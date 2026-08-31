@@ -2,8 +2,8 @@
   "name": "project-8-doctor's-appointment-system",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type" : "module",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
@@ -12,7 +12,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.11.0",
