@@ -55,7 +55,7 @@ const doctorSchema = new mongoose.Schema(
         } ,
         address :
         {
-            type : object ,
+            type : Object ,
             required : [true,"Enter your address"],
         } ,
         date :
