@@ -114,3 +114,109 @@ js
   export { registerUser, loginUser };
 
 Adding "type": "module" tells Node to treat our .js files as ES Modules, so import/export works instead of throwing an error. Without it, Node assumes CommonJS by default.
+
+---
+
+## 🧩 Why are `express.json()` and `cors()` used as middleware?
+
+### 🔹 `express.json()`
+
+`express.json()` allows Express to **read JSON data sent in the request body** and makes it available through `req.body`.
+
+```js
+app.use(express.json());
+```
+
+Without it, when the frontend sends JSON data, Express may not be able to read `req.body` properly.
+
+### 🔹 `cors()`
+
+`cors()` allows the frontend and backend to **communicate with each other even when they are running on different origins** (for example, different ports).
+
+```js
+app.use(cors());
+```
+
+For example:
+
+```text
+Frontend → localhost:5173
+Backend  → localhost:4000
+```
+
+Since these are different origins, CORS allows the browser to accept requests between them.
+
+---
+
+---
+
+## 🧩 Why do we use `minimize: false` with an empty object?
+
+Consider this Mongoose schema:
+
+```js
+slots_booked: {
+    type: Object,
+    default: {}
+}
+```
+
+### 🔹 `default: {}`
+
+`default: {}` means that if no value is provided for `slots_booked`, Mongoose gives it an **empty object** by default.
+
+```js
+slots_booked: {}
+```
+
+So when a new doctor is created, initially there are no booked appointment slots.
+
+### 🔹 Why do we need `minimize: false`?
+
+By default, Mongoose uses:
+
+```js
+minimize: true
+```
+
+This means Mongoose **removes empty objects when saving the document**.
+
+For example:
+
+```js
+slots_booked: {}
+```
+
+may be removed before the document is stored in MongoDB.
+
+To tell Mongoose to **keep the empty object**, we use:
+
+```js
+{
+    minimize: false
+}
+```
+
+Now:
+
+```js
+slots_booked: {}
+```
+
+will actually be preserved in the MongoDB document.
+
+### 🧠 Easy Way to Remember
+
+```text
+default: {}
+      ↓
+Creates the empty object
+
+minimize: false
+      ↓
+Prevents Mongoose from removing the empty object
+```
+
+> ⭐ **`default: {}` creates the empty object, while `minimize: false` tells Mongoose to preserve that empty object in MongoDB.**
+
+---
