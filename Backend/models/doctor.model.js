@@ -47,6 +47,7 @@ const doctorSchema = new mongoose.Schema(
         {
             type : Boolean ,
             required : [true,"Are you available or not"] ,
+            default:true ,
         } ,
         fees : 
         {
@@ -60,7 +61,7 @@ const doctorSchema = new mongoose.Schema(
         } ,
         date :
         {
-            type : date ,
+            type : Date ,
             required : true ,
         } ,
         slots_booked :
