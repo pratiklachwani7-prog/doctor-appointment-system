@@ -92,4 +92,35 @@ const addDoctor = async (req,res) =>
     }
 }
 
-export {addDoctor} ;
+// API Login for admin
+const loginAdmin = async (req , res) =>
+{
+    try
+    {
+        const {email , password} = req.body ;
+
+        if ( email == process.env.ADMIN_EMAIL && password == process.env.ADMIN_PASSWORD)
+        {
+             
+        }
+        else
+        {
+            res.status(400).json({
+                success : true ,
+                message:"Invalid Credentials"
+            })
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.status(201).json({
+            success : false ,
+            message: "LOL",
+            message: err.message ,
+        })
+    }
+}
+
+
+export {addDoctor,loginAdmin} ;
