@@ -2,7 +2,9 @@
 import validator from "validator" ;
 import bycrypt from "bcrypt" ;
 import {v2 as cloudinary} from "cloudinary" ;
-import doctorModel from "../models/doctor.model.js"
+import doctorModel from "../models/doctor.model.js" ;
+import jwt from "jsonwebtoken" ;
+
 
 const addDoctor = async (req,res) => 
 {
@@ -101,7 +103,13 @@ const loginAdmin = async (req , res) =>
 
         if ( email == process.env.ADMIN_EMAIL && password == process.env.ADMIN_PASSWORD)
         {
-             
+            const token = jwt.sign(email+password , process.env.JWT_SECRET) ;
+
+            res.status(200).json({
+                success:true ,
+                token
+
+            })
         }
         else
         {
