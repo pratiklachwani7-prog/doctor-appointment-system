@@ -114,7 +114,7 @@ const loginAdmin = async (req , res) =>
         else
         {
             res.status(400).json({
-                success : true ,
+                success : false ,
                 message:"Invalid Credentials"
             })
         }
@@ -122,7 +122,7 @@ const loginAdmin = async (req , res) =>
     catch(err)
     {
         console.log(err);
-        res.status(201).json({
+        res.status(500).json({
             success : false ,
             message: "LOL",
             message: err.message ,
