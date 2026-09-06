@@ -9,3 +9,7 @@ Adds a new doctor to the system along with their profile information and profile
 ### `POST /api/admin/login`
 
 Authenticates an admin using their login credentials.
+
+### `POST /api/admin/all-doctors`
+
+Fetches all doctors from the system without including their passwords.

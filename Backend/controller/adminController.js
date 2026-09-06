@@ -106,7 +106,7 @@ const loginAdmin = async (req , res) =>
             const token = jwt.sign(email+password , process.env.JWT_SECRET) ;
 
             res.cookie("token",token, {httpOnly : true}) ;
-            
+
             res.status(200).json({
                 success:true ,
                 token
@@ -132,5 +132,26 @@ const loginAdmin = async (req , res) =>
     }
 }
 
+// API To get All Doctors List
+const allDoctors = async (req,res) =>
+{
+    try
+    {
+        const doctors = await doctorModel.find({}).select('-password') ; //Find all the doctors and fetch all attributes without the paswword
+        res.status(200).json({
+            success:true ,
+            doctors
+        })
+    }
+    catch(err)
+    {
+        console.log(err) ;
+        res.status(500).json({
+            success:true ,
+            message:"There is some Error with the Server" ,
+            message:err,
+        })
+    }
+}
 
-export {addDoctor,loginAdmin} ;
+export {addDoctor,loginAdmin,allDoctors} ;
