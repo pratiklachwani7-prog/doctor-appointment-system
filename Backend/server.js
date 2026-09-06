@@ -4,6 +4,7 @@ import cors from "cors" ;
 import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
 import adminRouter from "./routes/admin.route.js";
+import cookieParser from "cookie-parser"
 
 // app config
 
@@ -16,7 +17,7 @@ app.use(express.json()) ;
 app.use(cors()) ;
 connectDB() ;
 connectCloudinary() ;
-
+app.use(cookieParser()) ;
 // api endpoints 
 
 /** 

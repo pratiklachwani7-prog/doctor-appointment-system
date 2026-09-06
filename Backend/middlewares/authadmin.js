@@ -6,7 +6,14 @@ const authAdmin = async (req,res,next) =>
 {
     try
     {
-        const {adminToken} = req.header ;
+        // console.log(req.headers.authorization?.split(" ")[1] , req.cookies.token ) ;
+        // const {adminToken} = req.headers.authorization?.split(" ")[1] ;
+        // console.log(adminToken) ;
+        // if (!adminToken) adminToken = req.cookies.token ;
+        // console.log(adminToken) ;
+
+        const adminToken = req.header("token") || req.cookies.token ;
+
 
         if (!adminToken)
         {
@@ -33,7 +40,7 @@ const authAdmin = async (req,res,next) =>
     catch(err)
     {
         console.log(err);
-        res.status(500).json({
+        res.status(401).json({
             success : false ,
             message: "LOL",
             message: err.message ,

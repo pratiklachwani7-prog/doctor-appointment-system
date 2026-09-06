@@ -105,6 +105,8 @@ const loginAdmin = async (req , res) =>
         {
             const token = jwt.sign(email+password , process.env.JWT_SECRET) ;
 
+            res.cookie("token",token, {httpOnly : true}) ;
+            
             res.status(200).json({
                 success:true ,
                 token
