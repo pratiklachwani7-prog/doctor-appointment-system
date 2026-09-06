@@ -130,4 +130,58 @@ Then fetch the JWT:
     token = <JWT>
     → req.cookies.token
 ---
+# 🔎 Mongoose Find & Update — Quick Revision
 
+## `findById()`
+
+Used to find a document using its MongoDB `_id`.
+
+    const doctor = await doctorModel.findById(docId);
+
+    // Finds the doctor whose _id === docId
+
+
+## `findByIdAndUpdate()`
+
+Used to find a document by `_id` and update it.
+
+    await doctorModel.findByIdAndUpdate(
+        docId,
+        { available: !doctor.available }
+    );
+
+Parameters:
+
+    1. docId → which document to update
+    2. update object → what to change
+
+
+## `{ new: true }`
+
+By default, `findByIdAndUpdate()` returns the **old document**.
+
+To get the updated document, use:
+
+    const updatedDoctor = await doctorModel.findByIdAndUpdate(
+        docId,
+        { available: !doctor.available },
+        { new: true }
+    );
+
+Now:
+
+    updatedDoctor
+
+contains the **updated document**.
+
+
+## ⭐ Quick Remember
+
+    findById(id)
+        → Find document
+
+    findByIdAndUpdate(id, update)
+        → Find + update document
+
+    { new: true }
+        → Return updated document
