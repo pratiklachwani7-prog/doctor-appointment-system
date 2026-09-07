@@ -47,7 +47,7 @@ const doctorList = async (req , res) =>
 
         res.status(200).json({
             success:true,
-            message:`${doctors.length} Doctors data fetched`,
+            message:`${doctors.length} Doctors data fetched for UI`,
             doctors
         })
     } 

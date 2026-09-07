@@ -551,6 +551,87 @@ So the important concept is:
 
     JWT can then be sent back with future requests.
 
+# 🍪 `httpOnly: true` in Cookies
+
+When creating a cookie:
+
+    res.cookie("token", token, {
+        httpOnly: true
+    });
+
+## What does `httpOnly: true` do?
+
+It tells the browser:
+
+> Store this cookie, but don't allow JavaScript running in the browser to access it.
+
+So if the JWT is stored in the cookie:
+
+    token = eyJhbGciOiJIUzI1Ni...
+
+with:
+
+    httpOnly: true
+
+frontend JavaScript cannot access it using:
+
+    document.cookie
+
+## Why is this useful?
+
+It protects the authentication cookie from being directly read by malicious JavaScript during an **XSS (Cross-Site Scripting)** attack.
+
+Without `httpOnly`:
+
+    JavaScript → document.cookie → JWT ❌
+
+With `httpOnly: true`:
+
+    JavaScript → cannot read the JWT ✅
+
+## Important Point
+
+`httpOnly` does **NOT** mean that the cookie cannot be sent to the backend.
+
+The browser can still automatically attach the cookie to requests:
+
+    Frontend
+        ↓
+      Request
+        ↓
+      Browser
+        ↓
+    Cookie automatically sent
+        ↓
+      Backend
+        ↓
+    req.cookies.token
+
+So:
+
+    httpOnly: true
+        ↓
+    JavaScript cannot READ the cookie
+        +
+    Browser can still SEND the cookie to the backend
+
+## Backend
+
+If using `cookie-parser`:
+
+    app.use(cookieParser());
+
+You can access the cookie in the backend using:
+
+    req.cookies.token
+
+### Remember
+
+`res.cookie()` → creates/sends the cookie
+
+`httpOnly: true` → prevents browser JavaScript from reading the cookie
+
+`req.cookies.token` → reads the cookie on the backend
 
 # 12. If the JWT is in a cookie, where is it?
 
