@@ -5,6 +5,7 @@ import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
 import adminRouter from "./routes/admin.route.js";
 import cookieParser from "cookie-parser"
+import doctorRouter from "./routes/doctor.route.js";
 
 // app config
 
@@ -24,9 +25,13 @@ app.use(cookieParser()) ;
  * localhost://4000/api/admin for Admins 
 */
 app.use('/api/admin',adminRouter) ;
+
+app.use('/api/doctor',doctorRouter) ;
+
 app.get('/', (req,res)=>{
     res.send("API is Working Like butter")
 } )
+
 
 app.listen(port , () => {console.log("Server started",port)}) ;
 
