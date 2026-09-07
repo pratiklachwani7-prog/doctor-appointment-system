@@ -185,3 +185,33 @@ contains the **updated document**.
 
     { new: true }
         → Return updated document
+
+# 📦 ES Module Export & Import — Quick Revision
+
+## Default Export
+
+    export default changeAvailability;
+
+Import it **without `{}`**:
+
+    import changeAvailability from "...";
+
+
+## Named Export
+
+    export { changeAvailability };
+
+Import it **with `{}`**:
+
+    import { changeAvailability } from "...";
+
+
+## ⭐ Remember
+
+    export default
+          ↓
+    import name from "..."
+
+    named export
+          ↓
+    import { name } from "..."

@@ -38,4 +38,6 @@ const changeAvailability = async (req , res) =>
     }
 }
 
-export default {changeAvailability} ;
+
+
+export {changeAvailability} ;

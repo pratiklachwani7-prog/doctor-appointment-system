@@ -46,7 +46,7 @@ const doctorSchema = new mongoose.Schema(
         available : 
         {
             type : Boolean ,
-            required : [true,"Are you available or not"] ,
+            //required : [true,"Are you available or not"] ,
             default:true ,
         } ,
         fees : 

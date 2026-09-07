@@ -73,7 +73,7 @@ const addDoctor = async (req,res) =>
             date : Date.now() ,
 
         }
-
+        console.log(doctorData) ;
         const newDoctor = new doctorModel(doctorData) ;
         await newDoctor.save();
 
@@ -86,10 +86,10 @@ const addDoctor = async (req,res) =>
     catch(err)  
     {
         console.log(err);
-        res.status(201).json({
+        res.status(500).json({
             success : false ,
             message: "LOL",
-            message: err.message ,
+            error: err.message ,
         })
     }
 }
@@ -140,6 +140,7 @@ const allDoctors = async (req,res) =>
         const doctors = await doctorModel.find({}).select('-password') ; //Find all the doctors and fetch all attributes without the paswword
         res.status(200).json({
             success:true ,
+            message:`${doctors.length} Doctors Fetched`,
             doctors
         })
     }
