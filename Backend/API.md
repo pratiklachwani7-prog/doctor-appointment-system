@@ -54,3 +54,5 @@ Used by the **frontend website** to fetch doctors and display them on the home p
 Both may fetch the same doctors from MongoDB, but their **purpose, access, and returned data are different**.
 ---
 
+### 'POST /api/user/login'
+Authenticates a user using their email and password and returns a JWT token.

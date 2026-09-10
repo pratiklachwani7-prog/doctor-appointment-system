@@ -52,7 +52,7 @@ const registerUser = async (req,res) =>
 
         res.cookie("userToken",userToken , {httpOnly:true}) ;
 
-        res.status(201).json({
+        return res.status(201).json({
             success:true ,
             message:"User Was Added Successfully",
             newUser ,
@@ -63,7 +63,7 @@ const registerUser = async (req,res) =>
     catch (err) 
     {
         console.log(err);
-        res.status(500).json({
+        return res.status(500).json({
             success:false ,
             message:"While Registering User , Something went Wrong",
             error : err.message,
@@ -71,4 +71,51 @@ const registerUser = async (req,res) =>
     }
 }
 
-export {registerUser} ;
+const loginUser = async ( req , res ) => 
+{
+    try 
+    {
+        const {email , password} = req.body ;
+        const user = await userModel.findOne({email}) ;
+
+        if ( !user )
+        {
+            return res.status(401).json({
+            success:false ,
+            message:"User Doesn't Exist",
+            })
+        }
+
+        const isMatched = await bycrypt.compare( password , user.password ) ;
+
+        if ( !isMatched ) 
+        {
+            return res.status(401).json({
+            success:false ,
+            message:"Invalid Credentials", 
+            })
+        }
+        else
+        {
+            const token = jwt.sign( {id:user._id} , process.env.JWT_SECRET) ;
+
+            res.cookie("loginToken",token,{httpOnly:true}) ;
+
+            res.status(200).json({
+                success:true,
+                message:token ,
+            })
+        }
+    } 
+    catch (err) 
+    {
+        console.log(err);
+        return res.status(500).json({
+            success:false ,
+            message:"While Registering User , Something went Wrong",
+            error : err.message,
+        })
+    }
+}
+
+export {registerUser,loginUser} ;
