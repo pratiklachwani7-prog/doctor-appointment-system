@@ -56,3 +56,7 @@ Both may fetch the same doctors from MongoDB, but their **purpose, access, and r
 
 ### 'POST /api/user/login'
 Authenticates a user using their email and password and returns a JWT token.
+
+
+### 'GET /api/user/get-profile'
+Fetches the profile information of the logged-in user.

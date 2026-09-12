@@ -112,10 +112,44 @@ const loginUser = async ( req , res ) =>
         console.log(err);
         return res.status(500).json({
             success:false ,
-            message:"While Registering User , Something went Wrong",
+            message:"While Login User , Something went Wrong",
             error : err.message,
         })
     }
 }
 
-export {registerUser,loginUser} ;
+const getProfile = async (req , res) =>
+{
+    try 
+    {
+        //we will use userId for authentication    
+        const userId  = req.userId ;
+        //so we will send the token and from token we will get the userId ; , so we have to make a middleware such that it converts the headers to user id req.body ;
+
+        const userData = await userModel.findById( userId ).select('-password') ;
+
+        if ( !userData )
+        {
+            return res.status(404).json({
+                success:false ,
+                message:"User Not found"
+            })
+        }
+
+        return res.status(200).json({
+            success:true,
+            userData ,
+        })
+    } 
+    catch (err) 
+    {
+        console.log(err);
+        return res.status(500).json({
+            success:false ,
+            message:"While Getting Profile , Something went Wrong",
+            error : err.message,
+        })    
+    }
+}
+
+export {registerUser,loginUser,getProfile} ;
