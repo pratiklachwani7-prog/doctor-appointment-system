@@ -159,10 +159,11 @@ const updateProfile = async (req , res) =>
 {
     try 
     {
-        const {userId , name , phone , address , dob , gender} = req.body ;
+        const { userId } = req ;
+        const {name , phone , address , dob , gender} = req.body ;
         const imageFile = req.file ;
 
-        if ( !name || !phone || !address || !dob || !gender )
+        if ( !name || !phone || !dob || !gender )
         {
             return res.status(400).json({
                 success:false ,
@@ -170,8 +171,7 @@ const updateProfile = async (req , res) =>
             })
         }
 
-        const updatedUser = await userModel.findByIdAndUpdate( userId , {name , phone , address:JSON.parse(address)  , dob , gender  }
-         , {new : true} )  ;
+        let updatedUser ;
 
         if ( imageFile )
         {
@@ -187,6 +187,9 @@ const updateProfile = async (req , res) =>
 
             updatedUser = await userModel.findByIdAndUpdate( userId , { image : imageURL } , {new : true}) ; 
         }
+
+        updatedUser = await userModel.findByIdAndUpdate( userId , {name , phone , address:JSON.parse(address)  , dob , gender  }
+         , {new : true} )  ;
 
          return res.status(200).json({
             success: true ,

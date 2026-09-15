@@ -60,3 +60,7 @@ Authenticates a user using their email and password and returns a JWT token.
 
 ### 'GET /api/user/get-profile'
 Fetches the profile information of the logged-in user.
+
+### POST `/api/user/update-profile`
+
+Updates the profile information of the logged-in user and optionally updates their profile image.
