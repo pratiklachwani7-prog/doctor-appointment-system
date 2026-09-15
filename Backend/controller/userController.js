@@ -1,6 +1,7 @@
 import validator from 'validator' ;
 import bycrypt from 'bcrypt' ;
 import userModel from '../models/user.model.js';
+import {v2 as cloudinary} from 'cloudinary'
 
 import jwt from 'jsonwebtoken' ;
 //Here we will create the business logic for the Users for  login , register , get profile , update Profile , book appointment , displaying the book appointment , cancelling the book appointment and also payment Gateway
@@ -152,4 +153,55 @@ const getProfile = async (req , res) =>
     }
 }
 
-export {registerUser,loginUser,getProfile} ;
+//Now to update the user Profile 
+
+const updateProfile = async (req , res) =>
+{
+    try 
+    {
+        const {userId , name , phone , address , dob , gender} = req.body ;
+        const imageFile = req.file ;
+
+        if ( !name || !phone || !address || !dob || !gender )
+        {
+            return res.status(400).json({
+                success:false ,
+                message:"Some of the Data is missing" ,
+            })
+        }
+
+        const updatedUser = await userModel.findByIdAndUpdate( userId , {name , phone , address:JSON.parse(address)  , dob , gender  }
+         , {new : true} )  ;
+
+        if ( imageFile )
+        {
+            //We will upload this image in the cloudinary and update the profile in the data base 
+
+            //Upload Image to Cloudinary 
+
+            const imageUpload = await cloudinary.uploader.upload( imageFile.path , {resource_type : "image"} ) ;
+
+            //This imageUpload is a image URl ,
+            console.log("The imageUpload object is :- ",imageUpload) ;
+            const imageURL = imageUpload.secure_url ;
+
+            updatedUser = await userModel.findByIdAndUpdate( userId , { image : imageURL } , {new : true}) ; 
+        }
+
+         return res.status(200).json({
+            success: true ,
+            message:"Updated Successfully" ,
+            updatedUser ,
+         })
+    } 
+    catch (err) 
+    {
+        console.log(err);
+        return res.status(500).json({
+            success:false ,
+            message:"While Updating Profile , Something went Wrong",
+            error : err.message,
+        })       
+    }
+}
+export {registerUser,loginUser,getProfile , updateProfile} ;
