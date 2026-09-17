@@ -1,6 +1,7 @@
 import validator from 'validator' ;
 import bycrypt from 'bcrypt' ;
 import userModel from '../models/user.model.js';
+import doctorModel from '../models/doctor.model.js';
 import {v2 as cloudinary} from 'cloudinary'
 
 import jwt from 'jsonwebtoken' ;
@@ -205,6 +206,81 @@ const updateProfile = async (req , res) =>
             message:"While Updating Profile , Something went Wrong",
             error : err.message,
         })       
+    }
+}
+
+//Now we have to create a logic for booking a appointment
+
+const bookAppointment = async (req , res) => 
+{
+    try 
+    {
+        const { userId } = req.userId ;
+        const { docId , slotDate , slotTime}  = req.body ;
+
+        if ( !userId || !docData || !slotDate || !slotTime )
+        {
+            return res.status(400).json({
+                success:"false",
+                message:"Some Information is missing",
+            })
+        }
+
+        const docData = await doctorModel.findById( docId ).select('-password') ;
+
+        if ( !docData)
+        {
+            return res.status(404).json({
+                success:"false",
+                message:"Doctor not found",
+            })
+        }
+
+        if ( !docData.available )
+        {
+            return res.status(409).json({
+                success:"false",
+                message:"Doctor is not Available",
+            })
+        }
+
+        let slotsBooked = docData.slots_booked
+        //Checking for the slot availability 
+        if ( slotsBooked[slotDate] )
+        {
+            if ( slotsBooked[slotDate].includes(slotTime) )
+            {
+                return res.status(409).json({
+                    success:"false",
+                    message:"Slot is not Empty",
+                })
+            }
+            else
+            {
+                slotsBooked[slotDate].push(slotTime) ;
+            }
+        }
+        else
+        {
+            slotsBooked[slotDate] = [] ;
+            slotsBooked[slotDate].push(slotDate) ;
+        }
+
+        const userData  = await userModel.findById(userId).select('-password') ;
+
+        delete docData.slots_booked
+
+        
+
+    }
+    catch (err) 
+    {
+        console.log(err);
+        return res.status(500).json({
+            success:false ,
+            message:"While Booking the Slot , Something went Wrong",
+            error : err.message,
+        })           
     }
 }
 export {registerUser,loginUser,getProfile , updateProfile} ;
