@@ -72,3 +72,7 @@ Creates a new appointment for the logged-in user.
 ### `GET /api/user/appointments`
 
 Fetches all appointments of the logged-in user.
+
+### `POST /api/user/cancel-appointment`
+
+Cancels an appointment of the logged-in user.

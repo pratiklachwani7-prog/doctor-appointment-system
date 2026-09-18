@@ -335,4 +335,59 @@ const listAppointments = async ( req , res ) =>
     }
 }
 
-export {registerUser,loginUser,getProfile , updateProfile , bookAppointment , listAppointments} ;
+//Now I need a API to Cancel the Appointment 
+
+const cancelAppointment = async (req,res) =>
+{
+    try 
+    {
+        const { userId } = req ;
+
+        const { appointmentId } = req.body ;
+
+        const appointmentData = await appointmentModel.findById( appointmentId ) ;
+
+        // Verifying Appointment User 
+
+        if ( appointmentData.userId != userId ) 
+        {
+            return res.status(403).json({
+                success:false ,
+                message:"",
+            })
+        }
+
+        await appointmentModel.findByIdAndUpdate( appointmentId , { cancelled : true } ) ;
+
+        // releasing the Doctors Slot
+
+        const { docId , slotDate , slotTime } = appointmentData ;
+
+        const doctorData = await doctorModel.findById( docId ) ;
+
+        let slotsBooked = doctorData.slots_booked ;
+
+        console.log(slotsBooked) ;
+
+        slotsBooked[slotDate] = slotsBooked[slotDate].filter( e => e !== slotTime ) ;
+
+        await doctorModel.findByIdAndUpdate( docId , {slotsBooked} ) ;
+
+        return res.status(200).json({
+            success:true,
+            message:"Appointment Cancelled" 
+        })
+
+    } 
+    catch (err) 
+    {
+        console.log(err);
+        return res.status(500).json({
+            success:false ,
+            message:"While Booking the Slot , Something went Wrong",
+            error : err.message,
+        })               
+    }
+}
+
+export {registerUser,loginUser,getProfile , updateProfile , bookAppointment , listAppointments , cancelAppointment } ;
