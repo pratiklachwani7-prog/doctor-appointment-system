@@ -68,3 +68,7 @@ Updates the profile information of the logged-in user and optionally updates the
 ### `POST /api/user/book-appointment`
 
 Creates a new appointment for the logged-in user.
+
+### `GET /api/user/appointments`
+
+Fetches all appointments of the logged-in user.

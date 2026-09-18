@@ -307,4 +307,32 @@ const bookAppointment = async (req , res) =>
         })           
     }
 }
-export {registerUser,loginUser,getProfile , updateProfile , bookAppointment } ;
+
+//Creating a API to Fetch all the Appointments for the logged in User
+
+const listAppointments = async ( req , res ) =>
+{
+    try
+    {
+        const { userId } = req ;
+        const appointments = await appointmentModel.find( {userId} ) ;
+
+        return res.status(200).json({
+            success:true,
+            message:"All Appointments Fetched" ,
+            number_of_Appointments : appointments.length ,
+            Appointments : appointments ,
+        })
+    }
+    catch (err) 
+    {
+        console.log(err);
+        return res.status(500).json({
+            success:false ,
+            message:"While Booking the Slot , Something went Wrong",
+            error : err.message,
+        })           
+    }
+}
+
+export {registerUser,loginUser,getProfile , updateProfile , bookAppointment , listAppointments} ;
