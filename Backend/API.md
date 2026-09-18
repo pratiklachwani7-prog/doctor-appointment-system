@@ -64,3 +64,7 @@ Fetches the profile information of the logged-in user.
 ### POST `/api/user/update-profile`
 
 Updates the profile information of the logged-in user and optionally updates their profile image.
+
+### `POST /api/user/book-appointment`
+
+Creates a new appointment for the logged-in user.

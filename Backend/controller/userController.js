@@ -5,6 +5,7 @@ import doctorModel from '../models/doctor.model.js';
 import {v2 as cloudinary} from 'cloudinary'
 
 import jwt from 'jsonwebtoken' ;
+import appointmentModel from '../models/appointment.model.js';
 //Here we will create the business logic for the Users for  login , register , get profile , update Profile , book appointment , displaying the book appointment , cancelling the book appointment and also payment Gateway
 
 //Api to register User
@@ -215,10 +216,11 @@ const bookAppointment = async (req , res) =>
 {
     try 
     {
-        const { userId } = req.userId ;
+        const { userId } = req ;
+        
         const { docId , slotDate , slotTime}  = req.body ;
 
-        if ( !userId || !docData || !slotDate || !slotTime )
+        if ( !userId || !slotDate || !slotTime )
         {
             return res.status(400).json({
                 success:"false",
@@ -270,7 +272,29 @@ const bookAppointment = async (req , res) =>
 
         delete docData.slots_booked
 
-        
+        const appointmentData = {
+            userId ,
+            docId , 
+            userData , 
+            docData ,
+            amount:docData.fees,
+            slotTime,
+            slotDate ,
+            date : Date.now() 
+        }
+
+        const newAppointment = await appointmentModel.create( appointmentData ) ;
+
+        //save new slots data in docData 
+
+        await doctorModel.findByIdAndUpdate( docId , {slotsBooked} ) ;
+
+        return res.status(201).json({
+            success:true ,
+            message:"Appointment Booked" ,
+            newAppointment
+        })
+
 
     }
     catch (err) 
@@ -283,4 +307,4 @@ const bookAppointment = async (req , res) =>
         })           
     }
 }
-export {registerUser,loginUser,getProfile , updateProfile} ;
+export {registerUser,loginUser,getProfile , updateProfile , bookAppointment } ;
