@@ -76,3 +76,8 @@ Fetches all appointments of the logged-in user.
 ### `POST /api/user/cancel-appointment`
 
 Cancels an appointment of the logged-in user.
+
+### `POST /api/user/payment-razorpay`
+
+Creates a Razorpay payment for the logged-in user.
+

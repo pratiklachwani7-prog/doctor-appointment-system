@@ -6,6 +6,9 @@ import {v2 as cloudinary} from 'cloudinary'
 
 import jwt from 'jsonwebtoken' ;
 import appointmentModel from '../models/appointment.model.js';
+
+import razorpay from "razorpay" ;
+import { CurrencyCodes } from 'validator/lib/isISO4217.js';
 //Here we will create the business logic for the Users for  login , register , get profile , update Profile , book appointment , displaying the book appointment , cancelling the book appointment and also payment Gateway
 
 //Api to register User
@@ -390,4 +393,56 @@ const cancelAppointment = async (req,res) =>
     }
 }
 
-export {registerUser,loginUser,getProfile , updateProfile , bookAppointment , listAppointments , cancelAppointment } ;
+//API of making an payment of appointment using razerPay 
+
+const razorPayInstance = new razorpay({
+    key_id : process.env.RAZORPAY_KEY_ID , 
+    key_secret : process.env.RAZORPAY_KEY_SECRET ,
+})
+
+const paymentRazerPay = async (req,res) =>
+{
+
+    try 
+    {
+        
+        const { appointmentId } = req.body ;
+    
+        const appointmentData = await appointmentModel.findById( appointmentId ) ;
+    
+        if ( !appointmentData || appointmentData.cancelled  )
+        {
+            return res.status(400).json({
+                message:"Appointment Cancelled or not found",
+            })
+        }
+    
+        // Creating Options for Razor Payments 
+    
+         const options = {
+            amount : appointmentData.amount * 100 ,
+            currency : process.env.CURRENCY ,
+            receipt : appointmentId ,
+         }
+    
+         const order = await razorPayInstance.orders.create(options)
+    
+         res.status(201).json({
+            success:true ,
+            message:"Order Created",
+            order
+         })
+    } 
+    catch (err) 
+    {
+        console.log(err);
+        return res.status(500).json({
+            success:false ,
+            message:"While Booking the Slot , Something went Wrong",
+            error : err.message,
+        })      
+    }
+
+
+} 
+export {registerUser,loginUser,getProfile , updateProfile , bookAppointment , listAppointments , cancelAppointment , paymentRazerPay } ;
