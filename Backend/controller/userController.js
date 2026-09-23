@@ -433,7 +433,7 @@ const paymentRazerPay = async (req,res) =>
             order
          })
     } 
-    catch (error) 
+    catch (err) 
     {
         console.log(err);
         return res.status(500).json({
