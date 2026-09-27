@@ -12,7 +12,8 @@ Normally, the frontend can send data as **JSON**:
   "email": "rahul@gmail.com",
   "fees": 500
 }
-```
+
+---
 
 
 Express can read this using:
