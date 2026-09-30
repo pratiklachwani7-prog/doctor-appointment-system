@@ -6,12 +6,13 @@
 
 Normally, the frontend can send data as **JSON**:
 
-
+---json
 {
   "name": "Dr. Rahul",
   "email": "rahul@gmail.com",
   "fees": 500
 }
+---
 
 
 
