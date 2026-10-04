@@ -445,4 +445,37 @@ const paymentRazerPay = async (req,res) =>
 
 
 } 
-export {registerUser,loginUser,getProfile , updateProfile , bookAppointment , listAppointments , cancelAppointment , paymentRazerPay } ;
+
+//API of Verify Payment of RazorPay
+const verifyRazorpay = async  (req,res) =>
+{
+    try 
+    {
+        const { razorpay_order_id } = req.body
+        const orderInfo = await razorPayInstance.orders.fetch(razorpay_order_id) 
+
+        console.log(orderInfo);
+
+        if ( orderInfo.status == "paid" ) 
+        {
+            await appointmentModel.findByIdAndUpdate(orderInfo.receipt , {payment : true } ) 
+            res.status().json({
+                success : true ,
+                message : "Payment Successfull" , 
+            })
+        }
+
+    } 
+    catch (err) 
+    {
+        console.log(err);
+        return res.status(500).json({
+            success:false ,
+            message:"While doing the payment for the Slot , Something went Wrong",
+            error : err.message,
+        })   
+    }
+}
+
+export {registerUser,loginUser,getProfile , updateProfile , bookAppointment , 
+    listAppointments , cancelAppointment , paymentRazerPay , verifyRazorpay} ;

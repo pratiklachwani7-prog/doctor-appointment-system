@@ -1,5 +1,5 @@
 import express from "express" ;
-import { getProfile, loginUser, registerUser, updateProfile , bookAppointment , listAppointments , cancelAppointment , paymentRazerPay } from "../controller/userController.js";
+import { getProfile, loginUser, registerUser, updateProfile , bookAppointment , listAppointments , cancelAppointment , paymentRazerPay, verifyRazorpay } from "../controller/userController.js";
 import authUser from "../middlewares/authUser.js";
 import upload from "../middlewares/multer.js";
 
@@ -14,6 +14,7 @@ userRouter.post("/book-appointment", authUser , bookAppointment) ;
 userRouter.get("/appointments", authUser , listAppointments) ;    
 userRouter.post("/cancel-appointment", authUser , cancelAppointment) ;
 userRouter.post("/payment-razorpay", authUser , paymentRazerPay) ;
+userRouter.post("/verify-razorpay", authUser , verifyRazorpay) ;
 
 
 
