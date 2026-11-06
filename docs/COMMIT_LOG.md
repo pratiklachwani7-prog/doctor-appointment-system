@@ -49,3 +49,18 @@ This document records every commit made during the project transformation, newes
 ---
 
 *End of Phase 1 Summary*
+
+### [bb11c49] docs(decision): record Phase 2-4 technical decisions
+- **Date:** 2026-11-06 20:00
+- **Branch:** phase-2-foundation
+- **Phase:** Phase 2 (Foundation)
+- **What changed:**
+  - Created `docs/decision.md` with three key decisions recorded
+  - Decision 1: TypeScript incremental migration with `allowJs`/`strict`
+  - Decision 2: Zod validation on every endpoint
+  - Decision 3: Stay with MongoDB + Mongoose (replica set for transactions)
+- **Why:** Document architectural decisions before implementation per documentation-first-engineering
+- **Files:** Created `docs/decision.md`
+- **How to verify:** Read `docs/decision.md` to confirm completeness
+- **Notes / follow-ups:** Ready to begin Phase 2 implementation
+
