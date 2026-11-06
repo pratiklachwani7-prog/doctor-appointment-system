@@ -79,3 +79,23 @@ This document records every commit made during the project transformation, newes
 - **How to verify:** Read `docs/PRD.md` to confirm completeness
 - **Notes / follow-ups:** Continue with ARCHITECTURE.md
 
+
+### [9c9e183] docs(architecture): add system architecture document from audit evidence
+- **Date:** 2026-11-06 20:20
+- **Branch:** phase-2-foundation
+- **Phase:** Phase 2 (Foundation)
+- **What changed:**
+  - Created `docs/ARCHITECTURE.md` from actual Backend code audit
+  - Current state (pre-Phase 2) documented from real code
+  - Target layered architecture with services + repositories
+  - Tech stack table with confirmed versions
+  - Mermaid diagrams for request flow, ER, auth, booking
+  - Database collections, indexes, transaction strategy
+  - API versioning, standard response format, pagination
+  - Security (RBAC, protection layers), infrastructure, scalability
+  - ADR summary linking to decision.md
+- **Why:** Document architecture before implementation per documentation-first-engineering
+- **Files:** Created `docs/ARCHITECTURE.md`
+- **How to verify:** Read `docs/ARCHITECTURE.md` to confirm completeness
+- **Notes / follow-ups:** Continue with DATABASE.md
+
