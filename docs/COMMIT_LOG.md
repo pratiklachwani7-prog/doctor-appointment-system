@@ -193,3 +193,16 @@ This document records every commit made during the project transformation, newes
 - **Files:** Created `docs/AGENTS.md`, `CLAUDE.md`, `docs/CONSTRAINTS.md`
 - **How to verify:** `ls CLAUDE.md docs/AGENTS.md docs/CONSTRAINTS.md`; confirm CLAUDE.md contains `@docs/AGENTS.md`
 - **Notes / follow-ups:** Documentation set for Phase 2 complete; next: TypeScript & tooling setup
+
+### [7f94a94] chore: normalize CRLF line endings in Backend files
+- **Date:** 2026-11-06 23:30
+- **Branch:** phase-2-foundation
+- **Phase:** Phase 2 (Foundation)
+- **What changed:**
+  - 21 files in `Backend/` committed with line-ending (CRLF) normalization only
+  - Verified whitespace-only: `git diff -w --numstat` reports zero substantive changes
+  - No code logic, configuration values, or credentials altered; `.env` remains untracked
+- **Why:** Preserve the user's working-tree state in version control without discarding it; publishing authorization received
+- **Files:** Modified: 21 files under `Backend/` (controllers, models, routes, middlewares, config, docs)
+- **How to verify:** `git diff 00721c3..7f94a94 -w` outputs nothing (no content changes)
+- **Notes / follow-ups:** Push to origin blocked — no credentials available in the sandbox environment
