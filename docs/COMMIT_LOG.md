@@ -99,3 +99,57 @@ This document records every commit made during the project transformation, newes
 - **How to verify:** Read `docs/ARCHITECTURE.md` to confirm completeness
 - **Notes / follow-ups:** Continue with DATABASE.md
 
+
+### [2e93671] docs(code-style): add coding standards from existing conventions + TS/ESLint rules
+- **Date:** 2026-11-06 20:45
+- **Branch:** phase-2-foundation
+- **Phase:** Phase 2 (Foundation)
+- **What changed:**
+  - Created `docs/CODE_STYLE.md` derived from existing JavaScript conventions
+  - TypeScript strict-mode rules, naming, structure, error handling standards
+  - ESLint/Prettier enforcement configuration notes
+- **Why:** Establish enforceable coding standards before migration begins
+- **Files:** Created `docs/CODE_STYLE.md`
+- **How to verify:** Read `docs/CODE_STYLE.md` to confirm completeness
+- **Notes / follow-ups:** Continue with DATABASE.md
+
+### [2bde219] docs(database): add database design from actual Mongoose models + planned indexes
+- **Date:** 2026-11-06 20:46
+- **Branch:** phase-2-foundation
+- **Phase:** Phase 2 (Foundation)
+- **What changed:**
+  - Created `docs/DATABASE.md` from the three actual Mongoose models (user, doctor, appointment)
+  - Documented existing schema issues from audit (denormalized slots_booked, missing constraints)
+  - Planned indexes: compound, partial unique on (doctorId, slotStart), TTL candidates
+  - Transaction strategy for booking; replica set requirement noted
+- **Why:** Document data model and planned constraints before schema changes
+- **Files:** Created `docs/DATABASE.md`
+- **How to verify:** Read `docs/DATABASE.md`; cross-check against `Backend/models/*.js`
+- **Notes / follow-ups:** Continue with PHASE_PLAN.md
+
+### [5e91f38] docs(phase-plan): add Phase 2-4 checklist with verification gates
+- **Date:** 2026-11-06 20:47
+- **Branch:** phase-2-foundation
+- **Phase:** Phase 2 (Foundation)
+- **What changed:**
+  - Created `docs/PHASE_PLAN.md` with actionable checklists for Phases 2, 3, 4
+  - Verification gate criteria per phase (build, lint, tests, app start, security)
+- **Why:** Provide a single source of truth for phase scope and gate criteria
+- **Files:** Created `docs/PHASE_PLAN.md`
+- **How to verify:** Read `docs/PHASE_PLAN.md`; gates match the master requirements
+- **Notes / follow-ups:** Continue with SECURITY.md
+
+### [e9df68b] docs(security): add security policy grounded in audit findings
+- **Date:** 2026-11-06 20:48
+- **Branch:** phase-2-foundation
+- **Phase:** Phase 2 (Foundation)
+- **What changed:**
+  - Created `docs/SECURITY.md` from verified audit findings (§5 of AUDIT.md)
+  - 7 critical, 6 high, 4 medium issues documented with code locations
+  - Secrets management rules + C1 remediation plan (rotation, untracking, history purge)
+  - Planned controls mapped to Phase 2/3/4 with per-gate verification checklist
+  - Open items marked TBD (retention policy, GDPR/HIPAA, alerting, pen test)
+- **Why:** Security policy must precede security implementation per documentation-first-engineering
+- **Files:** Created `docs/SECURITY.md`
+- **How to verify:** Read `docs/SECURITY.md`; cross-check cited issues against AUDIT.md §5
+- **Notes / follow-ups:** Continue with TESTING.md, flow.md, AGENTS.md, CLAUDE.md, CONSTRAINTS.md
