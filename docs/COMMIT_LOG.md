@@ -153,3 +153,43 @@ This document records every commit made during the project transformation, newes
 - **Files:** Created `docs/SECURITY.md`
 - **How to verify:** Read `docs/SECURITY.md`; cross-check cited issues against AUDIT.md §5
 - **Notes / follow-ups:** Continue with TESTING.md, flow.md, AGENTS.md, CLAUDE.md, CONSTRAINTS.md
+
+### [ec60011] docs(testing): add testing strategy with mandatory TDD workflow
+- **Date:** 2026-11-06 22:55
+- **Branch:** phase-2-foundation
+- **Phase:** Phase 2 (Foundation)
+- **What changed:**
+  - Created `docs/TESTING.md` — current state verified (zero tests, zero coverage)
+  - Planned stack: Vitest + Supertest + mongodb-memory-server
+  - Test levels (unit/integration/concurrency), coverage targets, per-gate checklists
+- **Why:** TDD workflow must be documented before production code is written
+- **Files:** Created `docs/TESTING.md`
+- **How to verify:** Read `docs/TESTING.md`; confirm no test files exist in repo (`find . -name "*.test.*"`)
+- **Notes / follow-ups:** Continue with flow.md
+
+### [52b59f8] docs(flow): add as-is and to-be system flows from actual code
+- **Date:** 2026-11-06 22:56
+- **Branch:** phase-2-foundation
+- **Phase:** Phase 2 (Foundation)
+- **What changed:**
+  - Created `docs/flow.md` — all 14 endpoints verified against actual controllers/middlewares/routes
+  - As-is behavior per endpoint with known issues inline
+  - Extracted 10 concrete bugs (B1-B10): slot corruption, field-name mismatch, missing status codes, password leaks, credential-embedded admin tokens
+  - To-be targets mapped to Phase 2/3/4; route/middleware/controller map table
+- **Why:** Endpoint-level flows and extracted bugs are needed before refactoring begins
+- **Files:** Created `docs/flow.md`
+- **How to verify:** Cross-check flows against `Backend/controller/*.js` and `Backend/routes/*.js`
+- **Notes / follow-ups:** B1-B10 to be tracked in `docs/BUG.md` during Phase 2 implementation
+
+### [139578c] docs(agents): add AI agent instructions, CLAUDE.md import, and constraints
+- **Date:** 2026-11-06 22:58
+- **Branch:** phase-2-foundation
+- **Phase:** Phase 2 (Foundation)
+- **What changed:**
+  - Created `docs/AGENTS.md` — read order, non-negotiable rules (TDD, secrets, small commits), workflow, target repo layout, definition of done
+  - Created `CLAUDE.md` at repo root importing `@docs/AGENTS.md`
+  - Created `docs/CONSTRAINTS.md` — protected areas (secrets, decisions, payment flows, legacy Backend), hard constraints (replica set for transactions, no direct DB access outside repositories, Node 18+, TS strict), scope boundaries
+- **Why:** AI agents and contributors need a single entry point and explicit boundaries
+- **Files:** Created `docs/AGENTS.md`, `CLAUDE.md`, `docs/CONSTRAINTS.md`
+- **How to verify:** `ls CLAUDE.md docs/AGENTS.md docs/CONSTRAINTS.md`; confirm CLAUDE.md contains `@docs/AGENTS.md`
+- **Notes / follow-ups:** Documentation set for Phase 2 complete; next: TypeScript & tooling setup
