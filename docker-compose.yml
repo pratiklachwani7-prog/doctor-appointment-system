@@ -1,0 +1,141 @@
+version: '3.8'
+
+services:
+  # MongoDB Replica Set (3 nodes for transactions support)
+  mongo1:
+    image: mongo:7.0
+    container_name: mediconnect-mongo1
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo1-data:/data/db
+      - mongo1-config:/data/configdb
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - mediconnect-network
+
+  mongo2:
+    image: mongo:7.0
+    container_name: mediconnect-mongo2
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    volumes:
+      - mongo2-data:/data/db
+      - mongo2-config:/data/configdb
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - mediconnect-network
+
+  mongo3:
+    image: mongo:7.0
+    container_name: mediconnect-mongo3
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    volumes:
+      - mongo3-data:/data/db
+      - mongo3-config:/data/configdb
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - mediconnect-network
+
+  # Replica Set Initializer
+  mongo-init:
+    image: mongo:7.0
+    container_name: mediconnect-mongo-init
+    depends_on:
+      mongo1:
+        condition: service_healthy
+      mongo2:
+        condition: service_healthy
+      mongo3:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      echo "Waiting for MongoDB nodes to be ready..."
+      sleep 10
+      echo "Initializing replica set..."
+      mongosh --host mongo1:27017 <<'EOF'
+      rs.initiate({
+        _id: "rs0",
+        members: [
+          { _id: 0, host: "mongo1:27017", priority: 2 },
+          { _id: 1, host: "mongo2:27017", priority: 1 },
+          { _id: 2, host: "mongo3:27017", priority: 1 }
+        ]
+      });
+      // Wait for replica set to be ready
+      while (!rs.isMaster().ismaster) {
+        sleep(1000);
+      }
+      // Create database and collections
+      use mediconnect;
+      db.createCollection("users");
+      db.createCollection("doctors");
+      db.createCollection("appointments");
+      db.createCollection("refreshtokens");
+      print("Replica set initialized and database created");
+      EOF
+    networks:
+      - mediconnect-network
+
+  # API Server
+  api:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: mediconnect-api
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - MONGODB_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/mediconnect?replicaSet=rs0
+      - JWT_SECRET=your-super-secure-random-string-at-least-32-chars-long-for-development
+      - JWT_REFRESH_SECRET=another-super-secure-random-string-at-least-32-chars-long-for-development
+      - JWT_ACCESS_EXPIRY=15m
+      - JWT_REFRESH_EXPIRY=7d
+      - CLOUDINARY_NAME=your-cloud-name
+      - CLOUDINARY_API_KEY=your-api-key
+      - CLOUDINARY_API_SECRET=your-api-secret
+      - RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxx
+      - RAZORPAY_KEY_SECRET=your-razorpay-secret
+      - CURRENCY=INR
+      - ADMIN_EMAIL=admin@mediconnect.com
+      - ADMIN_PASSWORD_HASH=$$2b$$12$$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj/RK.PZvO.S
+      - FRONTEND_URL=http://localhost:5173
+      - LOG_LEVEL=debug
+    depends_on:
+      mongo-init:
+        condition: service_completed_successfully
+    volumes:
+      - ./Backend:/app
+      - /app/node_modules
+    networks:
+      - mediconnect-network
+    command: npm run dev
+
+volumes:
+  mongo1-data:
+  mongo1-config:
+  mongo2-data:
+  mongo2-config:
+  mongo3-data:
+  mongo3-config:
+
+networks:
+  mediconnect-network:
+    driver: bridge

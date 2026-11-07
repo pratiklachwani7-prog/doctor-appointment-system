@@ -1,0 +1,31 @@
+export const ErrorMessages = {
+  VALIDATION_FAILED: 'Validation failed',
+  UNAUTHORIZED: 'Authentication required',
+  INVALID_TOKEN: 'Invalid or expired token',
+  FORBIDDEN: 'Insufficient permissions',
+  NOT_FOUND: 'Resource not found',
+  CONFLICT: 'Resource conflict',
+  INTERNAL_ERROR: 'Internal server error',
+  RATE_LIMIT_EXCEEDED: 'Too many requests, please try again later',
+  INVALID_CREDENTIALS: 'Invalid email or password',
+  USER_EXISTS: 'User with this email already exists',
+  DOCTOR_NOT_VERIFIED: 'Doctor is not verified',
+  SLOT_UNAVAILABLE: 'Selected slot is not available',
+  APPOINTMENT_NOT_FOUND: 'Appointment not found',
+  PAYMENT_FAILED: 'Payment processing failed',
+  INVALID_PAYMENT: 'Invalid payment details',
+} as const;
+
+export const SuccessMessages = {
+  USER_REGISTERED: 'User registered successfully',
+  USER_LOGGED_IN: 'Logged in successfully',
+  USER_LOGOUT: 'Logged out successfully',
+  PROFILE_UPDATED: 'Profile updated successfully',
+  APPOINTMENT_BOOKED: 'Appointment booked successfully',
+  APPOINTMENT_CANCELLED: 'Appointment cancelled successfully',
+  APPOINTMENT_RESCHEDULED: 'Appointment rescheduled successfully',
+  PAYMENT_SUCCESS: 'Payment processed successfully',
+  DOCTOR_ADDED: 'Doctor added successfully',
+  DOCTOR_VERIFIED: 'Doctor verified successfully',
+  DOCTOR_AVAILABILITY_UPDATED: 'Availability updated successfully',
+} as const;
